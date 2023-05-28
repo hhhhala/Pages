@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建 axios 实例 http
 const http = axios.create({
-    baseURL: 'https://netease-cloud-music-api-five-iota-55.vercel.app/',
+    baseURL: 'https://musicapi-delta.vercel.app/',
     timeout:10000
 })
 
