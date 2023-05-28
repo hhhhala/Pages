@@ -4,12 +4,12 @@
         <div ref="musicBox" class="musicBox"  @click="ToisMusic" >
             <div ref="title" v-show="!isMusic" class="title">{{ title ? title : 'Music Play' }}</div>
             <div v-show="isMusic" class="controls">
-                <div><el-icon class="icon"><ArrowLeftBold /></el-icon></div>
-                <div>
-                    <el-icon class="icon" v-show="isPlay"><VideoPause /></el-icon>
-                    <el-icon class="icon" v-show="!isPlay"><VideoPlay /></el-icon>
+                <div><img src="@/assets/images/icon/previous.png" alt=""></div>
+                <div >
+                    <img v-show="!isPlay" @click="playMusic" src="@/assets/images/icon/play.png" alt="">
+                    <img v-show="isPlay" @click="pauseMusic" src="@/assets/images/icon/pause.png" alt="">
                 </div>
-                <div><el-icon class="icon"><ArrowRightBold /></el-icon></div>
+                <div><img src="@/assets/images/icon/next.png" alt=""></div>
             </div>
         </div>
         <div v-show="isList" class="list-box">
@@ -32,8 +32,8 @@ export default {
         return{
             title: '',
             num:0,
-            isMusic:false,
-            isList:true,
+            isMusic:true,
+            isList:false,
             isLoading:true,
             isPlay:false,
         }
@@ -41,42 +41,66 @@ export default {
     },
     // 函数
     methods: {
+        // 音乐框点击事件
         ToisMusic(){
             if(!this.isMusic){
                 this.isMusic = !this.isMusic
             }
         },
-        SelectSong(url, name, art){
+        // 播放按钮点击事件
+        async playMusic(){
+            const audio = this.$refs.audio
+            const music = this.musiclist
+            // 当无歌曲播放时，随机播放列表歌曲
+            if(!this.title){
+                this.num = Math.floor(Math.random() * this.musiclist.length);
+                this.title = `${music[this.num].name} - ${music[this.num].art}`
+                audio.src = music[this.num].url
+                console.log(`${this.title}无歌曲`);
+                console.log(this.num);
+            }
+            audio.play()
+            if(!this.isPlay)this.isPlay = !this.isPlay
+            console.log(`${this.isPlay}播放`);
+            // 当监听到音乐停止时 切换下一首歌
+            audio.addEventListener('ended', async () => {
+                this.num = Math.floor(Math.random() * this.musiclist.length);
+                this.title = `${music[this.num].name} - ${music[this.num].art}`
+                audio.src = music[this.num].url
+                console.log(`${this.title}下一首`);
+                console.log(`${this.num}下标`);
+
+                await this.pauseMusic()
+                console.log(`调用暂停`);
+                await this.playMusic()
+                console.log(`调用开始`);
+            })
+        },
+        pauseMusic(){
+            const audio = this.$refs.audio
+            audio.pause()
+            if(this.isPlay)this.isPlay = !this.isPlay
+            console.log(`${this.isPlay}暂停`);
+        },
+        // 列表元素点击事件
+        SelectSong(){
             // 获取当前点击的歌曲元素
             const item = event.target
             // 获取歌曲列表元素
             const mlist = this.$refs.mlist
-            // 获取音频媒体元素
-            const audio = this.$refs.audio
             // 改变所有歌曲样式为默认样式
             for (let i = 0; i < mlist.length; i++) {
                 mlist[i].classList = " ";
             }
             // 改变点击歌曲样式为点击样式
             item.classList = 'active'
-            this.title = `${name} - ${art}`
-            // 修改音频媒体歌曲url
-            audio.src = url
-            audio.play()
         }
     },
     watch:{
-        // title:function(newVal){
-        //     const title = this.$refs.title
-        //     if( newVal.length >= 20){
-        //         title.classList = 'title active'
-        //         // this.title = title
-        //         console.log(title.textContent);
-        //         // console.log(newVal);
-        //     }
-        // }
+
     },
     mounted(){
+
     }
 }
 </script>
@@ -107,6 +131,8 @@ export default {
         align-items: center;
         overflow: hidden;
         width: 16rem;
+        height: 4rem;
+        transition: all .2s ease;
     }
     .title{
         color: #fff;
@@ -114,24 +140,17 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .title.active {
-        display: flex;
-        animation: marquee 10s linear infinite;
-    }
-    @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-100%); }
-    }
     .controls{
         color: #fff;
         display: flex;
+        width: 80%;
+        padding-top: .3rem;
         justify-content: space-around;
         align-items: center;
-        padding: .2rem 4rem;
         overflow: hidden;
     }
-    .icon{
-        font-size: 1.4rem;
+    .controls img{
+        width: 3ch;
     }
     .list-box{
         position: fixed;
