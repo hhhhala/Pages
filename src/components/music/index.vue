@@ -1,6 +1,6 @@
 <template>
     <div id="box">
-        <audio ref="audio" ></audio>
+        <audio ref="audio" @ended="playNext"></audio>
         <div ref="musicBox" class="musicBox"  @click="ToisMusic" >
             <div ref="title" v-show="!isMusic" class="title">{{ title ? title : 'Music Play' }}</div>
             <div v-show="isMusic" class="controls">
@@ -39,6 +39,9 @@ export default {
         }
         
     },
+    computed:{
+
+    },
     // 函数
     methods: {
         // 音乐框点击事件
@@ -49,38 +52,32 @@ export default {
         },
         // 播放按钮点击事件
         async playMusic(){
-            const audio = this.$refs.audio
-            const music = this.musiclist
             // 当无歌曲播放时，随机播放列表歌曲
             if(!this.title){
                 this.num = Math.floor(Math.random() * this.musiclist.length);
-                this.title = `${music[this.num].name} - ${music[this.num].art}`
-                audio.src = music[this.num].url
+                this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
+                this.$refs.audio.src = this.musiclist[this.num].url
                 console.log(`${this.title}无歌曲`);
                 console.log(this.num);
             }
-            audio.play()
+            this.$refs.audio.play()
             if(!this.isPlay)this.isPlay = !this.isPlay
             console.log(`${this.isPlay}播放`);
-            // 当监听到音乐停止时 切换下一首歌
-            audio.addEventListener('ended', async () => {
-                this.num = Math.floor(Math.random() * this.musiclist.length);
-                this.title = `${music[this.num].name} - ${music[this.num].art}`
-                audio.src = music[this.num].url
-                console.log(`${this.title}下一首`);
-                console.log(`${this.num}下标`);
-
-                await this.pauseMusic()
-                console.log(`调用暂停`);
-                await this.playMusic()
-                console.log(`调用开始`);
-            })
         },
         pauseMusic(){
-            const audio = this.$refs.audio
-            audio.pause()
+            this.$refs.audio.pause()
             if(this.isPlay)this.isPlay = !this.isPlay
             console.log(`${this.isPlay}暂停`);
+        },
+        playNext(){
+            this.num = Math.floor(Math.random() * this.musiclist.length);
+            this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
+            this.$refs.audio.src = this.musiclist[this.num].url
+            console.log(`${this.title}下一首`);
+            console.log(`${this.num}下标`);
+            this.$refs.audio.load()
+            this.playMusic()
+            console.log(`调用开始`);
         },
         // 列表元素点击事件
         SelectSong(){
