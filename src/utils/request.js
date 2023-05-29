@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建 axios 实例 http
 const http = axios.create({
-    baseURL: 'http://musicapi.hhhhala.top/',
+    baseURL: 'https://musicapi.hhhhala.top/',
     timeout:10000
 })
 
