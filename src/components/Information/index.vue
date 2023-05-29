@@ -6,7 +6,7 @@
         <div class="content">
             <h3>Hello, Is My Page</h3>
             <h1>HHHHala7777777</h1>
-            <h3>WElCOM</h3>
+            <h3>WElCOME</h3>
 
             <div class="Social-media">
                 <a href="" class="icon"><img src="@/assets/images/icon/gitee.png" alt="" /></a>

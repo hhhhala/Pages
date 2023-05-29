@@ -4,14 +4,19 @@
         <div ref="musicBox" class="musicBox"  @click="ToisMusic" >
             <div ref="title" v-show="!isMusic" class="title">{{ title ? title : 'Music Play' }}</div>
             <div v-show="isMusic" class="controls">
-                <div><img src="@/assets/images/icon/previous.png" alt=""></div>
-                <div >
+                <div>
+                    <img @click="playNext(-1)" src="@/assets/images/icon/previous.png" alt="">
+                </div>
+                <div>
                     <img v-show="!isPlay" @click="playMusic" src="@/assets/images/icon/play.png" alt="">
                     <img v-show="isPlay" @click="pauseMusic" src="@/assets/images/icon/pause.png" alt="">
                 </div>
-                <div><img src="@/assets/images/icon/next.png" alt=""></div>
+                <div>
+                    <img @click="playNext(1)" src="@/assets/images/icon/next.png" alt="">
+                </div>
             </div>
         </div>
+            
         <div v-show="isList" class="list-box">
             <ul  class="list">
                 <li ref="mlist" v-for="(music) in musiclist" :key="music.id"  @dblclick="SelectSong(music.url, music.name, music.art)" >
@@ -32,7 +37,7 @@ export default {
         return{
             title: '',
             num:0,
-            isMusic:true,
+            isMusic:false,
             isList:false,
             isLoading:true,
             isPlay:false,
@@ -47,7 +52,16 @@ export default {
         // 音乐框点击事件
         ToisMusic(){
             if(!this.isMusic){
-                this.isMusic = !this.isMusic
+                this.isMusic = true
+                console.log(`${this.isMusic} - isMusic`);
+                document.addEventListener('click', this.closeModal);
+            }
+        },
+        closeModal(event) {
+            // this.$refs.musicBox.contains(event.target); 在元素内 为true 元素外 为false
+            if (!this.$refs.musicBox.contains(event.target)) {
+                this.isMusic = false
+                document.removeEventListener('click', this.closeModal);
             }
         },
         // 播放按钮点击事件
@@ -57,27 +71,24 @@ export default {
                 this.num = Math.floor(Math.random() * this.musiclist.length);
                 this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
                 this.$refs.audio.src = this.musiclist[this.num].url
-                console.log(`${this.title}无歌曲`);
-                console.log(this.num);
             }
             this.$refs.audio.play()
             if(!this.isPlay)this.isPlay = !this.isPlay
-            console.log(`${this.isPlay}播放`);
+            console.log(`${this.title}`);
         },
         pauseMusic(){
             this.$refs.audio.pause()
             if(this.isPlay)this.isPlay = !this.isPlay
-            console.log(`${this.isPlay}暂停`);
         },
-        playNext(){
-            this.num = Math.floor(Math.random() * this.musiclist.length);
+        playNext(index){
+            this.num = this.num + index
+            if(this.num >= this.musiclist.length){
+                this.num = 0
+            }
             this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
             this.$refs.audio.src = this.musiclist[this.num].url
-            console.log(`${this.title}下一首`);
-            console.log(`${this.num}下标`);
             this.$refs.audio.load()
             this.playMusic()
-            console.log(`调用开始`);
         },
         // 列表元素点击事件
         SelectSong(){
@@ -91,7 +102,7 @@ export default {
             }
             // 改变点击歌曲样式为点击样式
             item.classList = 'active'
-        }
+        },
     },
     watch:{
 
@@ -126,25 +137,41 @@ export default {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        overflow: hidden;
+        /* overflow: hidden; */
         width: 16rem;
         height: 4rem;
         transition: all .2s ease;
+        color: #fff;
     }
     .title{
-        color: #fff;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .controls{
-        color: #fff;
-        display: flex;
         width: 80%;
         padding-top: .3rem;
+        display: flex;
         justify-content: space-around;
         align-items: center;
         overflow: hidden;
+        overflow: hidden;
+    }
+    .other{
+        width: 100%;
+        position: absolute;
+        top: 4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 .4rem .4rem;
+    }
+    .other div{
+        margin: 0 1rem 1rem 1rem ;
     }
     .controls img{
         width: 3ch;
