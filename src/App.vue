@@ -13,7 +13,6 @@
 import Background from "@/components/Background"
 import Information from "@/components/Information"
 import music from "@/components/music"
-
 import { getsearchlist, getmusicurl } from "@/api/index"
 
 export default {
@@ -48,15 +47,6 @@ export default {
 </script>
 
 <style>
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  user-select: none;  /* 禁止元素内的文本被选取 */
-}
-body,html{
-  overflow: hidden;
-}
 main{
   width: min(100%, 100% - 4rem);
   height: 100vh;

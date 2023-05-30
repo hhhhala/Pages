@@ -10,8 +10,8 @@
 
             <div class="Social-media">
                 <a href="" class="icon"><img src="@/assets/images/icon/gitee.png" alt="" /></a>
-                <a href="" class="icon"><img src="@/assets/images/icon/github.png" alt="" /></a>
-                <a href="" class="icon"><img src="@/assets/images/icon/bilibili.png" alt="" /></a>
+                <a href="https://github.com/hhhhala" class="icon"><img src="@/assets/images/icon/github.png" alt="" /></a>
+                <a href="https://space.bilibili.com/312701905" class="icon"><img src="@/assets/images/icon/bilibili.png" alt="" /></a>
             </div>
         </div>
     </div>
@@ -26,13 +26,11 @@
     border-radius: 50%;
     box-shadow: 0 0 10px #0b333f;
     margin: 0 auto 20px auto;
-    z-index: 1;
 }
 
 .content {
     text-align: center;
     position: relative;
-    z-index: 1;
     color: #fff;
 }
 .icon{

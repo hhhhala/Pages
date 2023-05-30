@@ -1,6 +1,7 @@
 <template>
     <div id="box">
         <audio ref="audio" @ended="playNext"></audio>
+        <button @click="this.isList = !this.isList">123</button>
         <div ref="musicBox" class="musicBox"  @click="ToisMusic" >
             <div ref="title" v-show="!isMusic" class="title">{{ title ? title : 'Music Play' }}</div>
             <div v-show="isMusic" class="controls">
@@ -19,7 +20,7 @@
             
         <div v-show="isList" class="list-box">
             <ul  class="list">
-                <li ref="mlist" v-for="(music) in musiclist" :key="music.id"  @dblclick="SelectSong(music.url, music.name, music.art)" >
+                <li ref="mlist" v-for="(music, index) in musiclist" :key="music.id"  @dblclick="SelectSong(index)" >
                     <span>{{ music.name }}</span>
                     <span>{{ music.art }}</span>
                 </li>
@@ -65,7 +66,7 @@ export default {
             }
         },
         // 播放按钮点击事件
-        async playMusic(){
+        playMusic(){
             // 当无歌曲播放时，随机播放列表歌曲
             if(!this.title){
                 this.num = Math.floor(Math.random() * this.musiclist.length);
@@ -84,6 +85,8 @@ export default {
             this.num = this.num + index
             if(this.num >= this.musiclist.length){
                 this.num = 0
+            }else if(this.num < 0){
+                this.num = this.musiclist.length - 1
             }
             this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
             this.$refs.audio.src = this.musiclist[this.num].url
@@ -91,7 +94,8 @@ export default {
             this.playMusic()
         },
         // 列表元素点击事件
-        SelectSong(){
+        SelectSong(index){
+            this.num = index
             // 获取当前点击的歌曲元素
             const item = event.target
             // 获取歌曲列表元素
@@ -100,8 +104,11 @@ export default {
             for (let i = 0; i < mlist.length; i++) {
                 mlist[i].classList = " ";
             }
+            this.title = `${this.musiclist[this.num].name} - ${this.musiclist[this.num].art}`
+            this.$refs.audio.src = this.musiclist[this.num].url
             // 改变点击歌曲样式为点击样式
             item.classList = 'active'
+            this.playMusic()
         },
     },
     watch:{
@@ -114,16 +121,10 @@ export default {
 </script>
 
 <style scoped>
-    body,html{
-        width: 100%;
-        height: 100%;
-    }
-    *{margin: 0;padding: 0;box-sizing: border-box;}
     #box{
-        position: fixed;
+        position: absolute;
         height: 100vh;
         width: 100%;
-        z-index: 99;
     }
     .musicBox{
         position: fixed;
