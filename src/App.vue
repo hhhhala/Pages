@@ -1,52 +1,19 @@
 <template>
   <div id="app">
-    <music :musiclist="musiclist"></music>
     <Background />
     <main>
-      <Information></Information>
+      <information title=""/>
     </main>
   </div>
 </template>
 
-<script>
-
+<script setup>
 import Background from "@/components/Background"
-import Information from "@/components/Information"
-import music from "@/components/music"
-import { getsearchlist, getmusicurl } from "@/api/index"
-
-export default {
-  name: 'App',
-  components: {
-    Background,
-    Information,
-    music,
-  },
-  data(){
-    return{
-      musiclist:[],
-    }
-  },
-  mounted(){
-    getsearchlist().then(({data:res}) =>{
-      console.log(res);
-            res.playlist.tracks.forEach((item,index) => {
-                getmusicurl(item.id).then(({data:res}) =>{
-                    this.musiclist.push({
-                    'id':index,
-                    'name':item.name,
-                    'art':item.ar[0].name,
-                    'url':res.data[0].url
-                })
-                }) 
-            });
-        })
-  }
-}
+import information from "@/views/Information"
 
 </script>
 
-<style>
+<style scoped>
 main{
   width: min(100%, 100% - 4rem);
   height: 100vh;
