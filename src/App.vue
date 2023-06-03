@@ -2,7 +2,7 @@
   <div id="app">
     <Background />
     <main>
-      <information title=""/>
+      <information title="hhhhala"/>
     </main>
   </div>
 </template>
@@ -10,6 +10,7 @@
 <script setup>
 import Background from "@/components/Background"
 import information from "@/views/Information"
+
 
 </script>
 

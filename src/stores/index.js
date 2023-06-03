@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
 
-export const mainStore = defineStore('main', {
-    state: () => {
-        return { 
-            LinkOpenState: false, // 盒子开启状态
-    
-    }
+export const mainStore = defineStore('main',{
+    // 数据(data)
+    state:() => {
+        return {
+            linkOpenstate:false,
+        }
+    },
+    // 计算属性(computed)
+    getters: {
+        
+    },
+    // 方法(methods)
+    actions: {
+        
     }
 })

@@ -26,7 +26,7 @@ let linksDate = [
     },
     {
         icon:'',
-        name:'余',
+        name:'关于',
         link:''
     }
 ]
@@ -37,15 +37,21 @@ let linksDate = [
     display: grid;
     grid-template-columns:repeat(3,1fr);
     column-gap: .5rem;
-    text-align: right;
 }
 .itemCards{
-    background-color: #00000048;
+    backdrop-filter: bulr(10px);
     border-radius: .4rem;
-    padding: 1rem 4rem;
+    padding: .3rem 2rem;
     cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 2rem .3rem;
+}
+.name{
+    white-space: nowrap;  
 }
 .itemCards:hover{
-    transform: scale(1.02);
+    filter: drop-shadow(0 0 6px #fff);
+
 }
 </style>
